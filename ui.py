@@ -1,9 +1,12 @@
+import bpy
+from bpy.props import *
+from collections import deque
 from . import fx_map
 from . import fx_maker
 
 # text fx instances
-fx_map = fx_map.TextEffectsMap()        # data
-fx = fx_maker.TextEffectsMaker(fx_map)  # logic
+fx_map = fx_map.TextEffectsMap()
+fx = fx_maker.TextEffectsMaker()
 
 # TODO set up props menu on empty (also shows up on letter select?)
 #   - modify the existing fx
@@ -127,7 +130,7 @@ class TextFxOperator(bpy.types.Operator):
         #       print("No location/rotation/scale attr recognized for effect - cancelling text effect")
         #       return {'FINISHED'}
 
-        fx.anim_txt(text_fx.text, fx_name=text_fx.effect, font=text_fx.font, fx_deltas=transforms, anim_order=text_fx.letters_order, anim_stagger=text_fx.time_offset, anim_length=text_fx.frames, spacing=text_fx.spacing)
+        fx.anim_txt(text_fx.text, fx_map, fx_name=text_fx.effect, font=text_fx.font, fx_deltas=transforms, anim_order=text_fx.letters_order, anim_stagger=text_fx.time_offset, anim_length=text_fx.frames, spacing=text_fx.spacing)
 
         return {'FINISHED'}
 

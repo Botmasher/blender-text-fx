@@ -1,27 +1,23 @@
+import bpy
+
 class TextEffectsMaker:
-    def __init__(self, fx_map):
-        self.set_fx_map(fx_map)
-
-    def set_fx_map(self, fx_map):
-        """Update the TextEffectsMap instance used for effects data"""
-        if type(fx_map) is not TextEffectsMap:
-            return False
-        self.fx_map = fx_map
-        return True
-
-    def get_fx_map(self):
-        """Update the TextEffectsMap instance used for effects data"""
-        return self.fx_map
+    def __init__(self):
+        self.name_format = "{text}-letter-{letter}"
 
     def is_text(self, obj):
         return obj and hasattr(obj, 'type') and obj.type == 'FONT'
+
+    def format_letter_name(self, text, letter):
+        """Create a name for a individual letter object parented to a text effect"""
+        name = self.name_format.replace("{text}", text).replace("{letter}", letter)
+        return name
 
     def create_letter(self, text, letter="", font=None):
         """Make letter data, letter object and link letter to scene"""
         if type(letter) is not str or type(text) is not str:
             return
         # letter data
-        name = "\"{0}\"-letter-{1}".format(text, letter)
+        name = self.format_letter_name(text, letter)
         letter_data = bpy.data.curves.new(name=name, type='FONT')
         letter_data.body = letter if letter != " " else ""
         # assign selected font
@@ -230,9 +226,14 @@ class TextEffectsMaker:
                 return False
         return True
 
-    def anim_txt(self, txt="", time_offset=1, fx_name='', anim_order="forwards", fx_deltas={}, anim_length=5, anim_stagger=0, spacing=0.0, font=''):
+    def anim_txt(self, fx_map, txt="", time_offset=1, fx_name='', anim_order="forwards", fx_deltas={}, anim_length=5, anim_stagger=0, spacing=0.0, font=''):
         # TODO use clockwise to set rot +- for transformed x,y,z
         if not (txt and type(txt) is str and fx_deltas != None):
+            # TODO exception
+            return
+
+        if not hasattr(fx_map, 'get_compound_fx'):
+            # TODO exception
             return
 
         if bpy.context.scene.objects.active:

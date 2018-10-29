@@ -1,3 +1,5 @@
+import bpy
+
 class Singleton:
     instance = None
     def __new__(singleton):

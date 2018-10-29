@@ -12,21 +12,21 @@ bl_info = {
     "location": "View3D",
     "tracker_url": "https://github.com/Botmasher/blender-text-fx/issues",
     "support": "COMMUNITY",
-    "category": "VSE"
+    "category": "3D View"
 }
 
 def register():
     ui.remove_text_fx_props()
-    bpy.utils.register_class(TextFxProperties)
-    bpy.utils.register_class(TextFxOperator)
-    bpy.utils.register_class(TextFxPanel)
+    bpy.utils.register_class(ui.TextFxProperties)
+    bpy.utils.register_class(ui.TextFxOperator)
+    bpy.utils.register_class(ui.TextFxPanel)
     ui.create_text_fx_props()
 
 def unregister():
     ui.remove_text_fx_props()
     bpy.utils.unregister_class(bpy.types.TextFxProperties)
     bpy.utils.unregister_class(bpy.types.OBJECT_OT_text_fx)
-    bpy.utils.unregister_class(TextFxPanel)
+    bpy.utils.unregister_class(ui.TextFxPanel)
 
 if __name__ == '__main__':
     register()
