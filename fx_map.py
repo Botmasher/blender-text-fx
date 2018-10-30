@@ -1,5 +1,4 @@
 import bpy
-from collections import deque
 
 class Singleton:
     instance = None
@@ -7,18 +6,8 @@ class Singleton:
         return super().__new__(singleton) if not singleton.instance else singleton.instance
 
 class TextEffectsMap(Singleton):
-    map = {}
-    def __init__(self, default_fx=True):
-        # TODO set slide, pop, other surrounding-letter-touching overshoots based on letter spacing
-        if default_fx:
-            self.create_fx(name='WIGGLE', attr='rotation_euler', kf_arc=[(0, 0), (0.5, 1), (0.5, -0.5), (0.25, 0)], axis=['z'])
-            self.create_fx(name='PUSH_IN', attr='location', kf_arc=[(0, 1), (1, -0.05), (0.25, 0)], axis=['x'])
-            self.create_fx(name='PUSH_OUT', attr='location', kf_arc=[(0, 0), (0.25, -0.02), (1, 1)], axis=['x'])
-            self.create_fx(name='FALL_IN', attr='location', kf_arc=[(0, 1), (1, -0.05), (0.25, 0)], axis=['y'])
-            self.create_fx(name='FALL_OUT', attr='location', kf_arc=[(0, 0), (0.25, -0.02), (1, 1)], axis=['y'])
-            self.create_fx(name='POP_IN', attr='scale', kf_arc=[(0, 0), (1, 1.1), (0.25, 1)], axis=['x', 'y', 'z'])
-            self.create_fx(name='POP_OUT', attr='scale', kf_arc=[(0, 1.1), (0.25, 1), (1, 0)], axis=['x', 'y', 'z'])
-            self.create_fx(name='NONE', attr='', kf_arc=[], axis=[])
+    def __init__(self):
+        self.map = {}
 
     def set_kf_arc(self, name, kf_arc):
         if type(kf_arc) != list:
@@ -127,17 +116,3 @@ class TextEffectsMap(Singleton):
             return
         self.map[name] = self.create_fx(name=name, attr=attr, kf_arc=kf_arc, axis=axis)
         return self.map[name]
-
-    def format_effects_names_to_bpy_enum(self):
-        fx_items = deque([])
-        fx_names_alphasort = sorted(self.keys(), reverse=True)
-        for k in fx_names_alphasort:
-            item_name = "{0}{1}".format(k[0].upper(), k[1:].lower().replace("_", " "))
-            if k.lower() == 'none':
-                item_description = "Add no effect to text"
-                fx_items.appendleft((k, item_name, item_description))
-                continue
-            item_description = "Add {0} effect to text".format(k.lower())
-            fx_items.append((k, item_name, item_description))
-        fx_items.reverse()
-        return list(fx_items)

@@ -1,10 +1,5 @@
 import bpy
-from . import fx_map
-from . import fx_maker
-
-# text fx instances
-fx_map = fx_map.TextEffectsMap()
-fx = fx_maker.TextEffectsMaker()
+from . import fx_manager
 
 # TODO layer effects vs replace effects
 #   - are created fx mutable?
@@ -19,14 +14,14 @@ class TextFxOperator(bpy.types.Operator):
     bl_description = "Create and configure text effect"
 
     def execute(self, ctx):
-        props_src = fx.find_text_fx_src()
+        props_src = fx_manager.fx_mgr.fx_maker.find_text_fx_src()
         text_fx = props_src.text_fx
 
         # TODO add effect to obj vs create new obj
         #   - example: font changed
 
         # TODO list all modified attrs for compound fx
-        modified_attrs = fx_map.get_attrs(name=text_fx.effect)
+        modified_attrs = fx_manager.fx_mgr.fx_map.get_attrs(name=text_fx.effect)
 
         # compile map of all transform magnitude deltas
         # NOTE x,y,z now defined in effects map - originally set here
@@ -43,7 +38,7 @@ class TextFxOperator(bpy.types.Operator):
         #       print("No location/rotation/scale attr recognized for effect - cancelling text effect")
         #       return {'FINISHED'}
 
-        fx.anim_txt(text_fx.text, fx_map, fx_name=text_fx.effect, font=text_fx.font, fx_deltas=transforms, anim_order=text_fx.letters_order, anim_stagger=text_fx.time_offset, anim_length=text_fx.frames, spacing=text_fx.spacing)
+        fx_manager.fx_mgr.fx_maker.anim_txt(text_fx.text, fx_manager.fx_mgr.fx_map, fx_name=text_fx.effect, font=text_fx.font, fx_deltas=transforms, anim_order=text_fx.letters_order, anim_stagger=text_fx.time_offset, anim_length=text_fx.frames, spacing=text_fx.spacing)
 
         return {'FINISHED'}
 
@@ -56,8 +51,8 @@ class TextFxPanel(bpy.types.Panel):
     bl_region_type = "TOOLS"
 
     def draw(self, ctx):
-        props_src = fx.find_text_fx_src()
-        modified_attrs = fx_map.get_attrs(name=props_src.text_fx.effect)
+        props_src = fx_manager.fx_mgr.fx_maker.find_text_fx_src()
+        modified_attrs = fx_manager.fx_mgr.fx_map.get_attrs(name=props_src.text_fx.effect)
 
         if props_src:
             layout = self.layout
