@@ -1,5 +1,6 @@
 import bpy
 from . import fx_manager
+from . import props
 
 # TODO layer effects vs replace effects
 #   - are created fx mutable?
@@ -58,7 +59,7 @@ class TextFxPanel(bpy.types.Panel):
             layout = self.layout
             text_fx = props_src.text_fx
 
-            for prop_name in text_fx_prop_names:
+            for prop_name in props.text_fx_prop_names:
                 # fall back to scene data if letters prop is undefined
                 if hasattr(text_fx, prop_name) and getattr(text_fx, prop_name) is not None:
                     fx_data = text_fx

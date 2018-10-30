@@ -7,7 +7,7 @@ def compile_default_fx():
     location = 'location'
     scale = 'scale'
 
-    default_fx = {
+    default_fx = [
         {
             name: 'WIGGLE',
             attr: rotation,
@@ -56,5 +56,5 @@ def compile_default_fx():
             kf_arc: [],
             axis: []
         }
-    }
+    ]
     return default_fx

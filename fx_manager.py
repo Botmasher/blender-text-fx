@@ -9,11 +9,11 @@ from . import default_fx
 #   - call this class from props.py, ui.py, maybe __init__
 #   - instantiate globally in __init__?
 class TextEffectsManager:
-    def __init__(self, fx_map=None, fx_maker=None):
-        if hasattr(fx_map, 'keys') and hasattr(fx_map, 'create_fx'):
-            self.fx_map = fx_map
-        if hasattr(fx_maker, 'anim_txt'):
-            self.fx_maker = fx_maker
+    def __init__(self, map=None, maker=None):
+        if map and hasattr(map, 'keys') and hasattr(map, 'create_fx'):
+            self.fx_map = map
+        if maker and hasattr(maker, 'anim_txt'):
+            self.fx_maker = maker
         return
 
     def add_effect(self, effect):
@@ -57,10 +57,10 @@ def start_manager():
     try:
         new_fx_mgr = fx_mgr
     except:
-        fx_map = fx_map.TextEffectsMap()
-        fx_maker = fx_maker.TextEffectsMaker()
+        effect_describer = fx_map.TextEffectsMap()
+        effect_creator = fx_maker.TextEffectsMaker()
         default_effects = default_fx.compile_default_fx()
-        new_fx_mgr = TextEffectsManager(fx_map=fx_map, fx_maker=fx_maker)
+        new_fx_mgr = TextEffectsManager(map=effect_describer, maker=effect_creator)
         new_fx_mgr.add_effects(default_effects)
     return new_fx_mgr
 

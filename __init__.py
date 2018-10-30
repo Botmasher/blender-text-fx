@@ -2,6 +2,7 @@ import bpy
 import os
 from bpy.utils import register_class, unregister_class
 from . import ui
+from . import props
 
 bl_info = {
     "name": "Text FX",
@@ -16,14 +17,26 @@ bl_info = {
 }
 
 def register():
-    ui.remove_text_fx_props()
-    bpy.utils.register_class(ui.TextFxProperties)
-    bpy.utils.register_class(ui.TextFxOperator)
-    bpy.utils.register_class(ui.TextFxPanel)
-    ui.create_text_fx_props()
+    props.remove_text_fx_props()
+    try:
+        bpy.utils.register_class(props.TextFxProperties)
+    except:
+        bpy.utils.unregister_class(props.TextFxProperties)
+        bpy.utils.register_class(props.TextFxProperties)
+    try:
+        bpy.utils.register_class(ui.TextFxOperator)
+    except:
+        bpy.utils.unregister_class(ui.TextFxOperator)
+        bpy.utils.register_class(ui.TextFxOperator)
+    try:
+        bpy.utils.register_class(ui.TextFxPanel)
+    except:
+        bpy.utils.unregister_class(ui.TextFxPanel)
+        bpy.utils.register_class(ui.TextFxPanel)
+    props.create_text_fx_props()
 
 def unregister():
-    ui.remove_text_fx_props()
+    props.remove_text_fx_props()
     bpy.utils.unregister_class(bpy.types.TextFxProperties)
     bpy.utils.unregister_class(bpy.types.OBJECT_OT_text_fx)
     bpy.utils.unregister_class(ui.TextFxPanel)

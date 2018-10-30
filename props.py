@@ -1,3 +1,4 @@
+import bpy
 from bpy.props import *
 from . import fx_manager
 
