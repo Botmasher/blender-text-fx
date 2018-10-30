@@ -1,4 +1,5 @@
 import bpy
+from collections import deque
 
 class Singleton:
     instance = None
@@ -126,3 +127,17 @@ class TextEffectsMap(Singleton):
             return
         self.map[name] = self.create_fx(name=name, attr=attr, kf_arc=kf_arc, axis=axis)
         return self.map[name]
+
+    def format_effects_names_to_bpy_enum(self):
+        fx_items = deque([])
+        fx_names_alphasort = sorted(self.keys(), reverse=True)
+        for k in fx_names_alphasort:
+            item_name = "{0}{1}".format(k[0].upper(), k[1:].lower().replace("_", " "))
+            if k.lower() == 'none':
+                item_description = "Add no effect to text"
+                fx_items.appendleft((k, item_name, item_description))
+                continue
+            item_description = "Add {0} effect to text".format(k.lower())
+            fx_items.append((k, item_name, item_description))
+        fx_items.reverse()
+        return list(fx_items)

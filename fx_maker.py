@@ -1,4 +1,5 @@
 import bpy
+import random
 
 class TextEffectsMaker:
     def __init__(self):
@@ -84,8 +85,6 @@ class TextEffectsMaker:
             'offset': 0         # gap between letter anims to stagger each letter's effect
         }
         """
-        # TODO update fx map above to reflect passed-in effect from effects list, plus sibling transforms, axis
-
         if not hasattr(font_obj, 'type') or not hasattr(font_obj, 'parent') or font_obj.type != 'FONT' or not effect or not 'attr' in effect:
             print("Failed to keyframe letter effect on {0} - expected a font curve parented to a letter fx empty".format(font_obj))
             return
@@ -124,7 +123,6 @@ class TextEffectsMaker:
 
             if 'location' in effect['attr']:
                 # calc fixed loc for all location kfs
-                # TODO recalculate since all axes passed in, but some add 0.0
                 for dir in axis:
                     try:
                         # transform magnitude for this direction relative to parent
@@ -226,14 +224,20 @@ class TextEffectsMaker:
                 return False
         return True
 
-    def anim_txt(self, fx_map, txt="", time_offset=1, fx_name='', anim_order="forwards", fx_deltas={}, anim_length=5, anim_stagger=0, spacing=0.0, font=''):
+    def anim_txt(self, txt, fx_map, time_offset=1, fx_name='', anim_order="forwards", fx_deltas={}, anim_length=5, anim_stagger=0, spacing=0.0, font=''):
         # TODO use clockwise to set rot +- for transformed x,y,z
-        if not (txt and type(txt) is str and fx_deltas != None):
+        if not (txt and type(txt) is str):
             # TODO exception
+            print("ERROR fx_maker.anim_txt: invalid txt arg - expected non-empty string")
+            return
+
+        if fx_deltas is None:
+            print("ERROR fx_maker.anim_txt: invalid fx_deltas arg - expected dict, found None")
             return
 
         if not hasattr(fx_map, 'get_compound_fx'):
             # TODO exception
+            print("ERROR fx_maker.anim_txt: expected fx_name instance to have method get_compound_fx")
             return
 
         if bpy.context.scene.objects.active:
@@ -247,6 +251,8 @@ class TextEffectsMaker:
         # check format of axis and delta maps
         if not self.is_transform_map(fx_deltas):
             return
+
+        print("fx_maker.anim_txt: creating & animating text_fx...")
 
         # build fx dict
         fx = {}
