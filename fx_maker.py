@@ -176,9 +176,11 @@ class TextEffectsMaker:
         letters_parent.location.x -= distance
         return letters_parent
 
-    def parent_anim_letters(self, letters, fx, parent=None, start_frame=0, kf_handler=keyframe_letter_fx):
+    def parent_anim_letters(self, letters, fx, parent=None, kf_handler=keyframe_letter_fx):
         """Attach letters to fx parent and keyframe each letter's effect based on fx data"""
         kfs = []
+
+        first_frame = bpy.context.scene.frame_current
 
         for effect in fx['effects']:
 
@@ -187,6 +189,8 @@ class TextEffectsMaker:
 
             for letter in letters:
 
+                first_frame = bpy.context.scene.frame_current if bpy.context.scene.frame_current < first_frame else first_frame
+
                 # attach to parent but remove offset
                 if not parent:
                     print("Expected text fx letter parent for '{0}' but parent is {1}".format(letter, parent))
@@ -194,11 +198,13 @@ class TextEffectsMaker:
                 letter.parent = parent
                 letter.matrix_parent_inverse = parent.matrix_world.inverted()
 
+                print("Anim frames: {0} -- Anim offset: {1} -- Current frame: {2}".format(fx['length'], fx['offset'], bpy.context.scene.frame_current))
+
                 effect['attr'] and effect['kf_arc'] and kfs.append(self.keyframe_letter_fx(letter, effect))
 
-                #print("Anim frames: {0} -- Anim offset: {1} -- Current frame: {2}".format(fx['length'], fx['offset'], bpy.context.scene.frame_current))
-
                 bpy.context.scene.frame_current += fx['offset']
+
+        bpy.context.scene.frame_current = first_frame
 
         return kfs
 
@@ -254,6 +260,9 @@ class TextEffectsMaker:
 
         print("fx_maker.anim_txt: creating & animating text_fx...")
 
+        # constrain per-letter effect length
+        anim_length = 1 if anim_length < 1 else anim_length
+
         # build fx dict
         fx = {}
         effects = fx_map.get_compound_fx(fx_name)
@@ -265,10 +274,6 @@ class TextEffectsMaker:
         fx['length'] = anim_length
         fx['offset'] = anim_stagger
         fx['transforms'] = fx_deltas    # magnitude only; axis set in effects map
-
-        #offsets = [i * time_offset for i in range(len(letters))]
-        #randomize and random.shuffle(offsets)
-        start_frame = bpy.context.scene.frame_current
 
         # TODO think through tricky cases where fx have:
         # - staggered starts but ending at the same frame
@@ -292,7 +297,7 @@ class TextEffectsMaker:
         # letter orders: front-to-back, back-to-front, random
         letter_orders = {
             'forwards': lambda l: [*l],
-            'backwards': lambda l: reversed(l),
+            'backwards': lambda l: list(reversed(l)),
             'random': lambda l: random.sample(l, len(l))
         }
         letters = letter_orders.get(anim_order, lambda l: l)(letters)
@@ -304,12 +309,10 @@ class TextEffectsMaker:
         #     letters = letters
 
         # keyframe effect for each letter
-        self.parent_anim_letters(letters, fx, parent=letters_parent, start_frame=start_frame)
+        self.parent_anim_letters(letters, fx, parent=letters_parent)
 
         # move letters to calculated target
         letters and self.set_parent_location(obj=letters[0], target=target_location)
-
-        bpy.context.scene.frame_current = start_frame
 
         return letters
 

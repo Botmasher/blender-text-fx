@@ -44,9 +44,9 @@ class TextFxProperties(bpy.types.PropertyGroup):
             ("forwards", "Forwards", "Animate text from first to last letter")
         ]
     )
-    frames = IntProperty(name="Frames", description="Frame duration of effect on each letter", default=10)
+    frames = IntProperty(name="Frames", description="Frame duration of effect on each letter", min=1, default=7)
     spacing = FloatProperty(name="Spacing", description="Distance between letters", default=0.1)
-    time_offset = IntProperty(name="Timing", description="Frames to wait between each letter's animation", default=1)
+    time_offset = IntProperty(name="Timing", description="Frames between each letter's animation (set negative for overlaps)", default=1)
     replace = BoolProperty(name="Replace", description="Replace the current effect (otherwise added to letters)", default=False)
     transform_location = FloatProperty(name="Location change", description="Added value for letter location effect", default=1.0)
     transform_rotation = FloatProperty(name="Rotation change", description="Added value for letter rotation effect", default=1.0)
