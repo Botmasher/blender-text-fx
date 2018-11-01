@@ -85,12 +85,14 @@ class TextEffectsMap(Singleton):
         return list(fx_attrs)
 
     def create_compound_fx(self, name='', effects=[]):
+        if not (name and effects):
+            return
         known_fx = []
-        if name and effects:
-            for effect in effects:
-                if type(effect) is str and self.exists(effect):
-                    known_fx.append(effect)
-            self.map[name] = effects
+        for effect in effects:
+            if type(effect) is str and self.exists(effect):
+                known_fx.append(effect)
+        self.map[name] = effects
+        return self.map[name]
 
     def add_compound_fx(self, effect, name=''):
         if self.exists(name) and self.exists(effect) and type(self.map[name]) is list:
@@ -110,6 +112,7 @@ class TextEffectsMap(Singleton):
             'kf_arc': kf_arc,
             'axis': axis
         }
+        return self.map[name]
 
     def set_fx(self, name='', attr='', kf_arc=[(0, 0), (1, 1)], axis=['x', 'y', 'z']):
         if not self.check_fx_vals(name, attr, kf_arc, axis):

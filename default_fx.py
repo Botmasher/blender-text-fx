@@ -6,13 +6,24 @@ def compile_default_fx():
     rotation = 'rotation_euler'
     location = 'location'
     scale = 'scale'
+    effects = 'effects'
 
     default_fx = [
         {
             name: 'WIGGLE',
             attr: rotation,
             kf_arc: [(0, 0), (0.5, 1), (0.5, -0.5), (0.25, 0)],
-            axis: ['x']
+            axis: ['z']
+        },
+        {
+            name: 'WOBBLE',
+            effects: ['WIGGLE', 'MOVE']
+        },
+        {
+            name: 'MOVE',
+            attr: location,
+            kf_arc: [(0, 0), (0.5, 1), (0.5, 0)],
+            axis: ['x', 'y']
         },
         {
             name: 'PUSH_IN',

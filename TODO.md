@@ -16,6 +16,15 @@
     - [ ] if not, update existing scene data even when effect not created
   - [ ] use `replace` prop to layer vs overwrite effects
 
+## Props & attributes
+- [ ] set prop value UI defaults for individual effects (e.g. popin defaults frames a bit negative)
+- [ ] randomization (see "calculations" below)
+
+## Calculations
+- [ ] add randomness to transforms
+  - [ ] prop for randomizing effect
+  - [ ] apply (compare `kf_arc` in fx and logic in `fx_maker`)
+
 ## Namespacing
 - [ ] take time to think about names and list rationale here
   - data rationale: ...

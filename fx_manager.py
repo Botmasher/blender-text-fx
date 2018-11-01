@@ -19,13 +19,16 @@ class TextEffectsManager:
     def add_effect(self, effect):
         if type(effect) is not dict:
             return
-        created_effect = self.fx_map.create_fx(
-            name=effect['name'],
-            attr=effect['attr'],
-            kf_arc=effect['kf_arc'],
-            axis=effect['axis']
-        )
-        return created_effect
+
+        if 'effects' in effect and type(effect['effects']) is list:
+            return self.fx_map.create_compound_fx(name=effect['name'], effects=effect['effects'])
+        else:
+            return self.fx_map.create_fx(
+                name=effect['name'],
+                attr=effect['attr'],
+                kf_arc=effect['kf_arc'],
+                axis=effect['axis']
+            )
 
     def add_effects(self, effects):
     # TODO set slide, pop, other surrounding-letter-touching overshoots based on letter spacing

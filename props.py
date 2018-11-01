@@ -68,8 +68,7 @@ class TextFxProperties(bpy.types.PropertyGroup):
             ("z", "Z", "Rotate letters along the z axis"),
             ("y", "Y", "Rotate letters along the y axis"),
             ("x", "X", "Rotate letters along the x axis")
-        ],
-        default='z'
+        ]
     )
     clockwise = BoolProperty(name="Clockwise", description="Rotate letters clockwise", default=True)
 
