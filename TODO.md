@@ -1,5 +1,12 @@
 # TODO Tasks
 
+## FIX: Live Exceptions
+- [ ] `MOVE` effect moves each letter to same `x` location, not relative
+  - expected: move relative to each letter
+  - question: transform not offset but to fixed target for all effects?
+- [ ] compound effects apply effect-sequentially to letters
+  - expected: apply all effects to first letter, move to next letter, apply ...
+
 ## Collect Relevant Comments
 - [ ] parse scripts for and pull out TODO comments
 - [ ] parse scripts for and pull out NOTE comments

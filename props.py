@@ -33,7 +33,8 @@ class TextFxProperties(bpy.types.PropertyGroup):
     effect = EnumProperty(
         name = "Effect",
         description = "Overall effect to give when animating the letters",
-        items = fx_manager.fx_mgr.format_effects_names_to_bpy_enum()
+        items = fx_manager.fx_mgr.format_effects_names_to_bpy_enum(),
+        default = "WOBBLE"
     )
     letters_order = EnumProperty(
         name = "Order",

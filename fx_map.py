@@ -54,7 +54,7 @@ class TextEffectsMap(Singleton):
         # known compound effect
         if type(self.map[normalized_name]) is list:
             try:
-                effects = [self.map[effect_name] for effect_name in self.map[normalize_name]]
+                effects = [self.map[effect_name] for effect_name in self.map[normalized_name]]
                 return effects
             except:
                 print("Error building compound fx list for effect {0}".format(normalized_name))

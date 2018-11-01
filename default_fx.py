@@ -16,10 +16,6 @@ def compile_default_fx():
             axis: ['z']
         },
         {
-            name: 'WOBBLE',
-            effects: ['WIGGLE', 'MOVE']
-        },
-        {
             name: 'MOVE',
             attr: location,
             kf_arc: [(0, 0), (0.5, 1), (0.5, 0)],
@@ -66,6 +62,10 @@ def compile_default_fx():
             attr: '',
             kf_arc: [],
             axis: []
+        },
+        {
+            name: 'WOBBLE',
+            effects: ['WIGGLE', 'MOVE']
         }
     ]
     return default_fx
