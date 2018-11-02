@@ -110,7 +110,7 @@ class TextEffectsMaker:
             return
 
         # keyframe along effect arc
-        print("Keyframing along {0} effect arc for letter {1}".format(effect['name'], font_obj))
+        print("Keyframing {0} effect for letter {1}".format(effect['name'], font_obj))
 
         for kf_mults in effect['kf_arc']:
             # multiply user settings by effect factors to get each kf
@@ -182,27 +182,33 @@ class TextEffectsMaker:
 
         first_frame = bpy.context.scene.frame_current
 
+        # pass overall frame length and deltas to each subeffect's data map
         for effect in fx['effects']:
-
             effect['length'] = fx['length']
             effect['transforms'] = fx['transforms']
 
-            for letter in letters:
+        for letter in letters:
+            first_frame = bpy.context.scene.frame_current if bpy.context.scene.frame_current < first_frame else first_frame
+            letter_start_frame = bpy.context.scene.frame_current
 
-                first_frame = bpy.context.scene.frame_current if bpy.context.scene.frame_current < first_frame else first_frame
+            # attach to parent but remove offset
+            if not parent:
+                print("Expected text fx letter parent for '{0}' but parent is {1}".format(letter, parent))
+                return
+            letter.parent = parent
+            letter.matrix_parent_inverse = parent.matrix_world.inverted()
 
-                # attach to parent but remove offset
-                if not parent:
-                    print("Expected text fx letter parent for '{0}' but parent is {1}".format(letter, parent))
-                    return
-                letter.parent = parent
-                letter.matrix_parent_inverse = parent.matrix_world.inverted()
+            print("Animating letter {0}. Anim frames: {1} -- Anim offset: {2} -- Current frame: {3}".format(letter, fx['length'], fx['offset'], bpy.context.scene.frame_current))
 
-                print("Anim frames: {0} -- Anim offset: {1} -- Current frame: {2}".format(fx['length'], fx['offset'], bpy.context.scene.frame_current))
-
+            for effect in fx['effects']:
+                print("Applying effect {0} to letter \"{1}\"".format(effect['name'], letter))
+                # rewind to layer all effects on each letter
+                bpy.context.scene.frame_current = letter_start_frame
+                # apply effect
                 effect['attr'] and effect['kf_arc'] and kfs.append(self.keyframe_letter_fx(letter, effect))
 
-                bpy.context.scene.frame_current += fx['offset']
+            # frame offset between letter anims
+            bpy.context.scene.frame_current += fx['offset']
 
         bpy.context.scene.frame_current = first_frame
 
@@ -258,7 +264,7 @@ class TextEffectsMaker:
         if not self.is_transform_map(fx_deltas):
             return
 
-        print("fx_maker.anim_txt: creating & animating text_fx...")
+        print("Creating & animating text effect {0}...".format(fx_name))
 
         # constrain per-letter effect length
         anim_length = 1 if anim_length < 1 else anim_length
