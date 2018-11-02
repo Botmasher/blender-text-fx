@@ -13,49 +13,57 @@ def compile_default_fx():
             name: 'WIGGLE',
             attr: rotation,
             kf_arc: [(0, 0), (0.5, 1), (0.5, -0.5), (0.25, 0)],
-            axis: ['z']
+            axis: ['z'],
+            relative: True
         },
         {
             name: 'MOVE',
             attr: location,
             kf_arc: [(0, 0), (0.5, 1), (0.5, 0)],
-            axis: ['x', 'y']
+            axis: ['x', 'y'],
+            relative: True
         },
         {
             name: 'PUSH_IN',
             attr: location,
             kf_arc: [(0, 1), (1, -0.05), (0.25, 0)],
-            axis: ['x']
+            axis: ['x'],
+            relative: False
         },
         {
             name: 'PUSH_OUT',
             attr: location,
             kf_arc: [(0, 0), (0.25, -0.02), (1, 1)],
-            axis: ['x']
+            axis: ['x'],
+            relative: False
         },
         {
             name: 'FALL_IN',
             attr: location,
             kf_arc: [(0, 1), (1, -0.05), (0.25, 0)],
-            axis: ['y']
+            axis: ['y'],
+            relative: False
         },
         {
             name: 'FALL_OUT',
             attr: location,
             kf_arc: [(0, 0), (0.25, -0.02), (1, 1)],
-            axis: ['y']
+            axis: ['y'],
+            relative: False
         },
         {
             name: 'POP_IN',
             attr: scale,
             kf_arc: [(0, 0), (1, 1.1), (0.25, 1)],
-            axis: ['x', 'y', 'z']
+            axis: ['x', 'y', 'z'],
+            relative: True
         },
         {
             name: 'POP_OUT',
             attr: scale,
             kf_arc: [(0, 1.1), (0.25, 1), (1, 0)],
-            axis: ['x', 'y', 'z']
+            axis: ['x', 'y', 'z'],
+            relative: True
         },
         {
             name: 'NONE',

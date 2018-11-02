@@ -125,14 +125,19 @@ class TextEffectsMaker:
                 # calc fixed loc for all location kfs
                 for dir in axis:
                     try:
-                        # transform magnitude for this direction relative to parent
-                        new_fixed_target = getattr(font_obj.parent.location, dir) + kf_value
-                        # global world object origin for this direction
-                        world_origin = getattr(font_obj.matrix_world.translation, dir)
-                        #  step to new value for this direction
-                        dir_value = self.lerp_step(origin=world_origin, target=new_fixed_target, factor=value_mult)
-                        # store keyframe values for all axes
-                        target_transform = {k: v if k != dir else dir_value for k, v in target_transform.items()}
+                        if effect['relative']:
+                            # move relative to current letter position
+                            dir_value = target_transform[dir] + kf_value
+                            target_transform = {k: v if k != dir else k: dir_value for k, v in target_transform.items()}
+                        else:
+                            # move to new parent-relative target position
+                            new_fixed_target = getattr(font_obj.parent.location, dir) + kf_value
+                            # global world object origin for this direction
+                            world_origin = getattr(font_obj.matrix_world.translation, dir)
+                            #  step to new value for this direction
+                            dir_value = self.lerp_step(origin=world_origin, target=new_fixed_target, factor=value_mult)
+                            # store keyframe values for all axes
+                            target_transform = {k: v if k != dir else dir_value for k, v in target_transform.items()}
                     except:
                         # location not recognized
                         print("Did not recognize {0} axis '{1}' for text fx - failed to animate letters".format(effect['attr'], dir))

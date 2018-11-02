@@ -63,9 +63,10 @@ class TextEffectsMap(Singleton):
             effects.append(self.get_fx_entry(normalized_name, normalize=False))
             return effects
 
-    def check_fx_vals(self, name, attr, kf_arc, axis):
-        if type(name) == str and type(attr) == str and type(kf_arc) == list and type(axis) == list:
+    def check_fx_vals(self, name, attr, kf_arc, axis, relative):
+        if type(name) == str and type(attr) == str and type(kf_arc) == list and type(axis) == list and type(relative) == bool:
             return True
+        print("Unable to set text fx \"{0}\" using attribute {1}, arc {2} and axis {3}".format(name, attr, kf_arc, axis))
         return False
 
     def get_attrs(self, name=''):
@@ -102,20 +103,20 @@ class TextEffectsMap(Singleton):
         if self.exists(name) and self.exists(effect) and type(self.map[name]) is list and effect in self.map[name]:
             self.map[name].remove(effect)
 
-    def create_fx(self, name='', attr='', kf_arc=[], axis=[]):
+    def create_fx(self, name='', attr='', kf_arc=[], axis=[], relative=False):
         if not self.check_fx_vals(name, attr, kf_arc, axis):
-            print("Unable to map text fx {0} to {1} effect arc {2}".format(name, attr, kf_arc))
             return
         self.map[name] = {
             'name': name,
             'attr': attr,
             'kf_arc': kf_arc,
-            'axis': axis
+            'axis': axis,
+            'relative': relative
         }
         return self.map[name]
 
-    def set_fx(self, name='', attr='', kf_arc=[(0, 0), (1, 1)], axis=['x', 'y', 'z']):
-        if not self.check_fx_vals(name, attr, kf_arc, axis):
+    def set_fx(self, name='', attr='', kf_arc=[(0, 0), (1, 1)], axis=['x', 'y', 'z'], relative=False):
+        if not self.check_fx_vals(name, attr, kf_arc, axis, relative):
             return
         self.map[name] = self.create_fx(name=name, attr=attr, kf_arc=kf_arc, axis=axis)
         return self.map[name]
