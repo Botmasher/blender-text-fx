@@ -104,7 +104,7 @@ class TextEffectsMap(Singleton):
             self.map[name].remove(effect)
 
     def create_fx(self, name='', attr='', kf_arc=[], axis=[], relative=False):
-        if not self.check_fx_vals(name, attr, kf_arc, axis):
+        if not self.check_fx_vals(name, attr, kf_arc, axis, relative):
             return
         self.map[name] = {
             'name': name,

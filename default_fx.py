@@ -7,6 +7,7 @@ def compile_default_fx():
     location = 'location'
     scale = 'scale'
     effects = 'effects'
+    relative = 'relative'
 
     default_fx = [
         {
@@ -69,7 +70,8 @@ def compile_default_fx():
             name: 'NONE',
             attr: '',
             kf_arc: [],
-            axis: []
+            axis: [],
+            relative: False
         },
         {
             name: 'WOBBLE',

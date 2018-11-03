@@ -128,7 +128,7 @@ class TextEffectsMaker:
                         if effect['relative']:
                             # move relative to current letter position
                             dir_value = target_transform[dir] + kf_value
-                            target_transform = {k: v if k != dir else k: dir_value for k, v in target_transform.items()}
+                            target_transform = {k: v if k != dir else dir_value for k, v in target_transform.items()}
                         else:
                             # move to new parent-relative target position
                             new_fixed_target = getattr(font_obj.parent.location, dir) + kf_value

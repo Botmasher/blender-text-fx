@@ -27,7 +27,8 @@ class TextEffectsManager:
                 name=effect['name'],
                 attr=effect['attr'],
                 kf_arc=effect['kf_arc'],
-                axis=effect['axis']
+                axis=effect['axis'],
+                relative=effect['relative']
             )
 
     def add_effects(self, effects):

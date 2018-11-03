@@ -26,6 +26,8 @@
 ## Props & attributes
 - [ ] set prop value UI defaults for individual effects (e.g. popin defaults frames a bit negative)
 - [ ] randomization (see "calculations" below)
+- [ ] document how to add key to effect data (as had to do with `'relative'`)
+  - [ ] through `default_fx`, `fx_manager`, `fx_map` and `fx_maker`
 
 ## Calculations
 - [ ] add randomness to transforms
