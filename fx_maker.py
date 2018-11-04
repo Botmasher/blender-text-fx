@@ -181,7 +181,21 @@ class TextEffectsMaker:
         letters_parent.location.x -= distance
         return letters_parent
 
-    def parent_anim_letters(self, letters, fx, parent=None, kf_handler=keyframe_letter_fx):
+    def randomize_letter_anim(self, fx, random_margin=1):
+        """Randomize effect length and offset and return a reset function"""
+        original_length = fx['length']
+        original_offset = fx['offset']
+        new_offset = random.randint(original_offset-random_margin, original_offset+random_margin)
+        new_length = random.randint(original_length-random_margin, original_length+random_margin)
+        fx['length'] = new_length
+        fx['offset'] = new_offset
+        def original_frames():
+            fx['length'] = original_length
+            fx['offset'] = original_offset
+            return new_offset
+        return original_frames
+
+    def parent_anim_letters(self, letters, fx, parent=None, kf_handler=keyframe_letter_fx, randomize=False):
         """Attach letters to fx parent and keyframe each letter's effect based on fx data"""
         kfs = []
 
@@ -195,6 +209,9 @@ class TextEffectsMaker:
         for letter in letters:
             first_frame = bpy.context.scene.frame_current if bpy.context.scene.frame_current < first_frame else first_frame
             letter_start_frame = bpy.context.scene.frame_current
+
+            if randomize:
+                reset_random = self.randomize_letter_anim(fx)
 
             # attach to parent but remove offset
             if not parent:
@@ -213,7 +230,10 @@ class TextEffectsMaker:
                 effect['attr'] and effect['kf_arc'] and kfs.append(self.keyframe_letter_fx(letter, effect))
 
             # frame offset between letter anims
-            bpy.context.scene.frame_current += fx['offset']
+            if randomize:
+                bpy.context.scene.frame_current += reset_random()  # mutate frame_current
+            else:
+                bpy.context.scene.frame_current += fx['offset']
 
         bpy.context.scene.frame_current = first_frame
 
