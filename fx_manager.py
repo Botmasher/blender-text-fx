@@ -4,12 +4,9 @@ from . import fx_map
 from . import fx_maker
 from . import default_fx
 
-# TODO create and hook up a class for managing tying together fx
-#   - fx_map format props enum, calling props, interfacing with fx_map and executing fx_maker
-#   - call this class from props.py, ui.py, maybe __init__
-#   - instantiate globally in __init__?
 class TextEffectsManager:
     def __init__(self, map=None, maker=None):
+        """Instantiate with an fx map (store effects) and maker (apply effects)"""
         if map and hasattr(map, 'keys') and hasattr(map, 'create_fx'):
             self.fx_map = map
         if maker and hasattr(maker, 'anim_txt'):
@@ -17,6 +14,7 @@ class TextEffectsManager:
         return
 
     def add_effect(self, effect):
+        """Add effect dict to effects map instance"""
         if type(effect) is not dict:
             return
 
@@ -32,7 +30,8 @@ class TextEffectsManager:
             )
 
     def add_effects(self, effects):
-    # TODO set slide, pop, other surrounding-letter-touching overshoots based on letter spacing
+        """Add list of effects dicts to effects map instance"""
+        # TODO set slide, pop, other surrounding-letter-touching overshoots based on letter spacing
         if not effects or type(effects) is not list:
             return
 
@@ -44,6 +43,7 @@ class TextEffectsManager:
         return created_effects
 
     def format_effects_names_to_bpy_enum(self):
+        """Create formatted enum list for UI props"""
         fx_items = deque([])
         fx_names_alphasort = sorted(self.fx_map.keys(), reverse=True)
         for k in fx_names_alphasort:
@@ -58,6 +58,7 @@ class TextEffectsManager:
         return list(fx_items)
 
 def start_manager():
+    """Create or retrieve the fx manager with default effects"""
     try:
         new_fx_mgr = fx_mgr
     except:
@@ -68,4 +69,7 @@ def start_manager():
         new_fx_mgr.add_effects(default_effects)
     return new_fx_mgr
 
-fx_mgr = start_manager()
+# NOTE dependency issues:
+#   - props uses fx_mgr to format enums
+#   - TextEffectsManager stores instance of map and one to maker
+fx_mgr = fx_manager.start_manager()

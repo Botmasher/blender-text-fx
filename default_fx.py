@@ -25,6 +25,20 @@ def compile_default_fx():
             relative: True
         },
         {
+            name: 'MOVE_HORIZ',
+            attr: location,
+            kf_arc: [(0, 0), (0.5, 1), (0.5, 0)],
+            axis: ['y'],
+            relative: True
+        },
+        {
+            name: 'MOVE_VERT',
+            attr: location,
+            kf_arc: [(0, 0), (0.5, 1), (0.5, 0)],
+            axis: ['x'],
+            relative: True
+        },
+        {
             name: 'PUSH_IN',
             attr: location,
             kf_arc: [(0, 1), (1, -0.05), (0.25, 0)],

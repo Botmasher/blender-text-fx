@@ -3,6 +3,7 @@ import os
 from bpy.utils import register_class, unregister_class
 from . import ui
 from . import props
+from . import fx_manager
 
 bl_info = {
     "name": "Text FX",

@@ -1,5 +1,9 @@
 # TODO Tasks
 
+## Documentation
+- [ ] shaping an effect with effects data (currently in `default_fx`)
+- [ ] manager, map, maker (see below)
+
 ## FIX: Live Exceptions
 - [ ] `MOVE` effect moves each letter to same `x` location, not relative
   - expected: move relative to each letter
