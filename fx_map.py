@@ -57,7 +57,7 @@ class TextEffectsMap(Singleton):
                 matching_effects.append(effect_name)
             elif check_compound and hasattr(self.map[effect_name]['effects']):
                 for layered_effect in self.map[effect_name]['effects']:
-                    and matching_effects.append(effect_name)
+                    self.exists(layered_effect) and effect == self.map[layered_effect] and matching_effects.append(effect_name)
             else:
                 pass
         return matching_effects
@@ -78,7 +78,7 @@ class TextEffectsMap(Singleton):
         if not self.exists(normalized_name):
             return effects
         # known compound effect
-        if hasattr(self.map[normalized_name], 'effects') and type(self.map[normalized_name]['effects']) is list:
+        if 'effects' in self.map[normalized_name] and type(self.map[normalized_name]['effects']) is list:
             try:
                 effects = [self.map[effect_name] for effect_name in self.map[normalized_name]['effects']]
                 return effects
@@ -102,10 +102,13 @@ class TextEffectsMap(Singleton):
         print("Unable to set text fx \"{0}\" using attribute {1}, arc {2} and axis {3}".format(name, attr, kf_arc, axis))
         return False
 
+    # TODO handle compounding compound effects
     def get_attrs(self, name=''):
         """List all of the transform attributes modified by the named effect"""
         effects = self.get_compound_fx(name)
-        fx_attrs = []
+        fx_attrs = set()
+        if self.exists(name) and 'attr' in self.map[name]:
+            fx_attrs.add(self.map[name]['attr'])
         def simplify_transform_attr(attr_name):
             if 'location' in attr_name:
                 return 'location'
@@ -116,23 +119,24 @@ class TextEffectsMap(Singleton):
             else:
                 return ''
         if effects:
-            fx_attrs = {simplify_transform_attr(effect['attr']) for effect in effects}
+            for effect in effects:
+                fx_attrs.add(simplify_transform_attr(effect['attr']))
         return list(fx_attrs)
 
     def create_compound_fx(self, name='', effects=[]):
         """Make a new effect that layers a list of named effects onto letters"""
-        if not (name and effects):
+        if not (type(name) is str and type(effects) is list):
             return
-        known_fx = []
-        for effect_name in effects:
-            if type(effect_name) is str and self.exists(effect_name):
-                known_fx.append(effect_name)
-        self.map[name]['effects'] = known_fx
+        known_fx = [effect_name for effect_name in effects if self.exists(effect_name)]
+        self.map[name] = {
+            'name': name,
+            'effects': known_fx
+        }
         return self.map[name]
 
     def reset_compound_fx(self, name='', effect_names=[]):
         """Replace the effect names list for the compound effect"""
-        if not self.exists(name) and :
+        if not self.exists(name) or type(effect_names) is not list:
             return
         for effect_name in effect_names:
             if not self.exists(effect_name):

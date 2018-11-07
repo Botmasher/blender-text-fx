@@ -72,4 +72,4 @@ def start_manager():
 # NOTE dependency issues:
 #   - props uses fx_mgr to format enums
 #   - TextEffectsManager stores instance of map and one to maker
-fx_mgr = fx_manager.start_manager()
+fx_mgr = start_manager()

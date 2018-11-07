@@ -3,14 +3,21 @@ import random
 
 class TextEffectsMaker:
     def __init__(self):
-        self.name_format = "{text}-letter-{letter}"
+        self.letter_name = "{text}-letter-{letter}"  # name format for created letter
+        self.parent_name = "text_fx-{effect}-{text}" # name format for fx parent
 
     def is_text(self, obj):
+        """Check if the object is a text object"""
         return obj and hasattr(obj, 'type') and obj.type == 'FONT'
 
     def format_letter_name(self, text, letter):
         """Create a name for a individual letter object parented to a text effect"""
-        name = self.name_format.replace("{text}", text).replace("{letter}", letter)
+        name = self.letter_name.replace("{text}", text).replace("{letter}", letter)
+        return name
+
+    def format_parent_name(self, text, effect_name):
+        """Create a name for a parent text effect empty"""
+        name = self.parent_name.replace("{effect}", effect_name).replace("{text}", text)
         return name
 
     def create_letter(self, text, letter="", font=None):
@@ -24,7 +31,7 @@ class TextEffectsMaker:
         # assign selected font
         if font and font in bpy.data.fonts:
             letter_data.font = bpy.data.fonts[font]
-        # letter object
+        # letter
         letter_obj = bpy.data.objects.new(letter_data.name, letter_data)
         bpy.context.scene.objects.link(letter_obj)
         return letter_obj
@@ -313,7 +320,8 @@ class TextEffectsMaker:
         # - ...
 
         # set up parent for holding letters
-        letters_parent = bpy.data.objects.new("text_fx", None)
+        parent_name = self.format_parent_name(txt, fx_name)
+        letters_parent = bpy.data.objects.new(parent_name, None)
         bpy.context.scene.objects.link(letters_parent)
         letters_parent.empty_draw_type = 'ARROWS'
         letters_parent.empty_draw_size = 1.0
@@ -332,12 +340,6 @@ class TextEffectsMaker:
             'random': lambda l: random.sample(l, len(l))
         }
         letters = letter_orders.get(anim_order, lambda l: l)(letters)
-        # if anim_order == 'random':
-        #     random.shuffle(letters)
-        # elif anim_order == 'backwards':
-        #     letters = reversed(letters)
-        # else:
-        #     letters = letters
 
         # keyframe effect for each letter
         self.parent_anim_letters(letters, fx, parent=letters_parent)
