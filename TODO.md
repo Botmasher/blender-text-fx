@@ -57,6 +57,7 @@
     - _letters_ are animated text objects using the fx props through maker logic
 
 ## Effects Maker
+- [ ] see test class in
 - [ ] resolve naming ambiguity above for term "maker"
 - [ ] resolve naming ambiguity above for effects terms
 - [ ] add ability to create and store custom effects

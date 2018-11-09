@@ -143,12 +143,12 @@ class TextEffectsMap(Singleton):
                 return
         self.map[name]['effects'] = effect_names
 
-    def add_compound_fx(self, effect_name, name=''):
+    def add_compound_fx_effect(self, effect_name, name=''):
         """Add effect name to the list of effects layered by the named compound effect"""
         if self.exists(name) and self.exists(effect_name) and self.is_compound_effect(name):
             self.map[name]['effects'].append(effect_name)
 
-    def remove_compound_fx(self, effect_name, name=''):
+    def remove_compound_fx_effect(self, effect_name, name=''):
         """Remove effect name from the list of effects layered by the named compound effect"""
         if self.exists(name) and self.exists(effect_name) and  self.is_compound_effect(name) and effect_name in self.map[name]['effects']:
             self.map[name]['effects'].remove(effect_name)
