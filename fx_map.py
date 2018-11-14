@@ -10,6 +10,7 @@ class Singleton:
     def __new__(singleton):
         return super().__new__(singleton) if not singleton.instance else singleton.instance
 
+# fx data store
 class TextEffectsMap(Singleton):
     def __init__(self):
         self.map = {}
@@ -69,7 +70,6 @@ class TextEffectsMap(Singleton):
         if self.exists(name):
             return self.map[name]
 
-    # TODO update storiny compound effects list with kv effects: []
     def get_compound_fx(self, name=''):
         """List each effect's transform data associated with the named effect including all layered effects for compound effects"""
         normalized_name = self.normalize_name(name)
@@ -102,7 +102,7 @@ class TextEffectsMap(Singleton):
         print("Unable to set text fx \"{0}\" using attribute {1}, arc {2} and axis {3}".format(name, attr, kf_arc, axis))
         return False
 
-    # TODO handle compounding compound effects
+    # TODO nest compound effects (e.g. compound_fx_1['effects'] list contains name of a compount effect)
     def get_attrs(self, name=''):
         """List all of the transform attributes modified by the named effect"""
         effects = self.get_compound_fx(name)

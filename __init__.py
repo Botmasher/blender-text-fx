@@ -4,6 +4,7 @@ from bpy.utils import register_class, unregister_class
 from . import ui
 from . import props
 from . import fx_manager
+from . import fx_creator
 
 bl_info = {
     "name": "Text FX",
@@ -34,6 +35,16 @@ def register():
     except:
         bpy.utils.unregister_class(ui.TextFxPanel)
         bpy.utils.register_class(ui.TextFxPanel)
+    try:
+        bpy.utils.register_class(fx_creator.EffectsCreator)
+    except:
+        bpy.utils.unregister_class(fx_creator.EffectsCreator)
+        bpy.utils.register_class(fx_creator.EffectsCreator)
+    try:
+        bpy.utils.register_class(fx_creator.EffectsCreatorPanel)
+    except:
+        bpy.utils.unregister_class(fx_creator.EffectsCreatorPanel)
+        bpy.utils.register_class(fx_creator.EffectsCreatorPanel)
     props.create_text_fx_props()
 
 def unregister():

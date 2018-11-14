@@ -40,11 +40,49 @@ class TextEffectsCreator:
             effect = self.fx_mapper.create_fx(fx_name, attr, kf_arc)
         return effect
 
-fx_mapper = fx_map.TextEffectsMap()
+effects_map = fx_map.TextEffectsMap()
 fx_creator = TextEffectsCreator(fx_mapper)
 
-# TODO ui
+# ui
 
-# panel
+# TODO instantiate props
+prop_names = [
+    'fx_name',
+    'attr',
+    'kf_arc_frames',
+    'kf_arc_values',
+    'axis',
+    'relative',
+    'compound',
+    'effects'
+]
 
-# operator
+class EffectsCreator(bpy.types.Operator):
+    bl_label = "Text FX Creator"
+    bl_idname = "object.text_fx_creator"
+    bl_description = "Create and configure text effect"
+
+    def execute(self, ctx):
+        prop_src = scene.text_fx_creator
+        # NOTE can wrap create call to pass in only prop_src
+        fx_creator.create(prop_src.fx_name, attr=prop_src.attr, frame_arc=prop_src.kf_arc_frames, value_arc=prop_src.kf_arc_values, relative=prop_src.relative, compound=prop_src.compound, effects=prop_src.effects)
+        return {'FINISHED'}
+
+class EffectsCreatorPanel(bpy.types.Panel):
+    bl_label = "Text FX Creator"
+    bl_idname = "object.text_fx_creator_panel"
+    bl_category = "TextFX Creator"
+    bl_context = "objectmode"
+    bl_space_type = "VIEW_3D"
+    bl_region_type = "TOOLS"
+
+    def draw(self, ctx):
+        scene = ctx.scene
+        layout = self.layout
+        prop_src = scene.text_fx_creator
+        for prop_name in prop_names:
+            try:
+                layout.row().prop(prop_src, prop_name)
+            except:
+                raise Exception("Scene.text_fx_creator")
+        layout.operator('text_fx_creator', text="Store effect")

@@ -12,7 +12,7 @@ from . import props
 class TextFxOperator(bpy.types.Operator):
     bl_label = "Text FX"
     bl_idname = "object.text_fx"
-    bl_description = "Create and configure text effect"
+    bl_description = "Apply text effect"
 
     def execute(self, ctx):
         props_src = fx_manager.fx_mgr.fx_maker.find_text_fx_src()
