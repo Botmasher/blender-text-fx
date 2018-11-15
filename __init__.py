@@ -19,6 +19,7 @@ bl_info = {
 }
 
 def register():
+    # ui and props for applying fx
     props.remove_text_fx_props()
     try:
         bpy.utils.register_class(props.TextFxProperties)
@@ -35,17 +36,21 @@ def register():
     except:
         bpy.utils.unregister_class(ui.TextFxPanel)
         bpy.utils.register_class(ui.TextFxPanel)
+    props.create_text_fx_props()
+    # ui and props for creating fx
     try:
+        bpy.utils.register_class(fx_creator.EffectsCreatorProperties)
+        bpy.types.Scene.text_fx_creator = bpy.props.PointerProperty(type=EffectsCreatorProperties)
         bpy.utils.register_class(fx_creator.EffectsCreator)
+        bpy.utils.register_class(fx_creator.EffectsCreatorPanel)
     except:
         bpy.utils.unregister_class(fx_creator.EffectsCreator)
-        bpy.utils.register_class(fx_creator.EffectsCreator)
-    try:
-        bpy.utils.register_class(fx_creator.EffectsCreatorPanel)
-    except:
         bpy.utils.unregister_class(fx_creator.EffectsCreatorPanel)
+        del bpy.types.Scene.text_fx_creator
+        bpy.utils.unregister_class(fx_creator.EffectsCreatorProperties)
+        bpy.utils.register_class(fx_creator.EffectsCreatorProperties)
         bpy.utils.register_class(fx_creator.EffectsCreatorPanel)
-    props.create_text_fx_props()
+        bpy.utils.register_class(fx_creator.EffectsCreator)
 
 def unregister():
     props.remove_text_fx_props()

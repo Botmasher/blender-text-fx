@@ -57,6 +57,38 @@ prop_names = [
     'effects'
 ]
 
+class EffectsCreatorProperties(bpy.types.PropertyGroup):
+    # TODO names, incrementing appended index, overwriting
+    fx_name = StringProperty(name="Name", description="Name for the new effect", default="My Effect")
+    attr = EnumProperty(
+        name = "Transform",
+        description = "Attribute to set during effect",
+        items = [
+            ("location", "Location", "Move letters"),
+            ("rotation_euler", "Rotation", "Rotate letters"),
+            ("scale", "Scale", "Scale letters")
+        ],
+        default='location'
+    )
+    # TODO variable list length
+    kf_arc_frames = FloatVectorProperty(name="Arc frames", size=4, description="Percent of total frames to advance between each keyframe", default=(0.2, 0.3, 0.25, 0.25))
+    kf_arc_values = FloatVectorProperty(name="Arc values", size=4, description="Percent of total value to set at each keyframe", default=(0.0, 0.5, 1.1, 1.0))
+    # TODO pull in known effect names
+    effects = StringVectorProperty(name="Effects", description="List of effects to compound", size=3, default=('WIGGLE', 'POP_IN', 'NONE'))
+    relative = BoolProperty(name="Relative", description="Transform each letter using relative (each letter to/from its point) or fixed (all letters to/from same point) values", default=False)
+    compound = BoolProperty(name="Compound", description="Toggle whether effect applies multiple other effects", default=False)
+    axis = EnumProperty(
+        name = "Axis",
+        description = "Transform axis for effect",
+        items = [
+            ("z", "Z", "Transform along the z axis"),
+            ("y", "Y", "Transform along the y axis"),
+            ("x", "X", "Transform along the x axis"),
+            ("xyz", "XYZ", "Transform along all axes"),
+        ],
+        default='xyz'
+    )
+
 class EffectsCreator(bpy.types.Operator):
     bl_label = "Text FX Creator"
     bl_idname = "object.text_fx_creator"
@@ -80,9 +112,12 @@ class EffectsCreatorPanel(bpy.types.Panel):
         scene = ctx.scene
         layout = self.layout
         prop_src = scene.text_fx_creator
+        is_compound = getattr(scene, 'compound')
         for prop_name in prop_names:
-            try:
+            if not is_compound and prop_name == 'effect':
+                continue
+            elif is_compound and prop_name in ['kf_arc_frames', 'kf_arc_values', 'axis', 'relative']:
+                continue
+            else:
                 layout.row().prop(prop_src, prop_name)
-            except:
-                raise Exception("Scene.text_fx_creator")
         layout.operator('text_fx_creator', text="Store effect")
