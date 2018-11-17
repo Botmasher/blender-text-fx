@@ -4,7 +4,7 @@ from bpy.utils import register_class, unregister_class
 from . import ui
 from . import props
 from . import fx_manager
-from . import fx_creator
+#from . import fx_creator   # UNSTABLE
 
 bl_info = {
     "name": "Text FX",
@@ -37,20 +37,20 @@ def register():
         bpy.utils.unregister_class(ui.TextFxPanel)
         bpy.utils.register_class(ui.TextFxPanel)
     props.create_text_fx_props()
-    # ui and props for creating fx
-    try:
-        bpy.utils.register_class(fx_creator.EffectsCreatorProperties)
-        bpy.types.Scene.text_fx_creator = bpy.props.PointerProperty(type=EffectsCreatorProperties)
-        bpy.utils.register_class(fx_creator.EffectsCreator)
-        bpy.utils.register_class(fx_creator.EffectsCreatorPanel)
-    except:
-        bpy.utils.unregister_class(fx_creator.EffectsCreator)
-        bpy.utils.unregister_class(fx_creator.EffectsCreatorPanel)
-        del bpy.types.Scene.text_fx_creator
-        bpy.utils.unregister_class(fx_creator.EffectsCreatorProperties)
-        bpy.utils.register_class(fx_creator.EffectsCreatorProperties)
-        bpy.utils.register_class(fx_creator.EffectsCreatorPanel)
-        bpy.utils.register_class(fx_creator.EffectsCreator)
+    # UNSTABLE - ui and props for creating fx - see fx_creator
+    # try:
+    #     bpy.utils.register_class(fx_creator.EffectsCreatorProperties)
+    #     bpy.types.Scene.text_fx_creator = bpy.props.PointerProperty(type=EffectsCreatorProperties)
+    #     bpy.utils.register_class(fx_creator.EffectsCreator)
+    #     bpy.utils.register_class(fx_creator.EffectsCreatorPanel)
+    # except:
+    #     bpy.utils.unregister_class(fx_creator.EffectsCreator)
+    #     bpy.utils.unregister_class(fx_creator.EffectsCreatorPanel)
+    #     del bpy.types.Scene.text_fx_creator
+    #     bpy.utils.unregister_class(fx_creator.EffectsCreatorProperties)
+    #     bpy.utils.register_class(fx_creator.EffectsCreatorProperties)
+    #     bpy.utils.register_class(fx_creator.EffectsCreatorPanel)
+    #     bpy.utils.register_class(fx_creator.EffectsCreator)
 
 def unregister():
     props.remove_text_fx_props()

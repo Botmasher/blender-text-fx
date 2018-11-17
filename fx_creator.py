@@ -40,7 +40,7 @@ class TextEffectsCreator:
             effect = self.fx_mapper.create_fx(fx_name, attr, kf_arc)
         return effect
 
-effects_map = fx_map.TextEffectsMap()
+fx_mapper = fx_map.TextEffectsMap()
 fx_creator = TextEffectsCreator(fx_mapper)
 
 # ui
@@ -74,7 +74,11 @@ class EffectsCreatorProperties(bpy.types.PropertyGroup):
     kf_arc_frames = FloatVectorProperty(name="Arc frames", size=4, description="Percent of total frames to advance between each keyframe", default=(0.2, 0.3, 0.25, 0.25))
     kf_arc_values = FloatVectorProperty(name="Arc values", size=4, description="Percent of total value to set at each keyframe", default=(0.0, 0.5, 1.1, 1.0))
     # TODO pull in known effect names
-    effects = StringVectorProperty(name="Effects", description="List of effects to compound", size=3, default=('WIGGLE', 'POP_IN', 'NONE'))
+    effects = EnumProperty(name="Effects", description="List of effects to compound",
+        items = [
+            ("Display name", "FX_NAME", "Effect description"),
+        ]
+    )
     relative = BoolProperty(name="Relative", description="Transform each letter using relative (each letter to/from its point) or fixed (all letters to/from same point) values", default=False)
     compound = BoolProperty(name="Compound", description="Toggle whether effect applies multiple other effects", default=False)
     axis = EnumProperty(
