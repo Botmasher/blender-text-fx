@@ -25,9 +25,13 @@ class TextEffectsMap(Singleton):
             return True
         return False
 
-    def get_map(self):
+    def entries(self):
         """Read all keys and values from the effects storage map"""
         return self.map
+
+    def entry(self, name):
+        """Read one entry from the effects storage map - unhandled version of get_fx_entry"""
+        return self.map[name]
 
     def keys(self):
         """Read all keys from the effects storage map"""
@@ -43,7 +47,7 @@ class TextEffectsMap(Singleton):
         return name.upper().replace(" ", "_")
 
     def exists(self, name):
-        """"""
+        """Check if an effect with this name exists in the effects map"""
         if not name in self.map:
             print("Unrecognized effect name {0} in text effects fx_map".format(name))
             return False
@@ -167,6 +171,7 @@ class TextEffectsMap(Singleton):
         return self.map[name]
 
     def add_display_data(self, name='', title='', description=''):
+        """Add a title and description to an existing effect"""
         if not self.exists(name):
             return
         self.map[name]['title'] = title
@@ -174,6 +179,7 @@ class TextEffectsMap(Singleton):
         return self.map[name]
 
     def create_with_display_data(self, name, attr='', kf_arc=[], axis=[], relative=False, effects=[], title='', description=''):
+        """Create an effect with a title and description"""
         if name and effects:
             self.create_fx(name=name, attr=attr, kf_arc=kf_arc, axis=axis, relative=relative)
         elif name and kf_arc and not axis:

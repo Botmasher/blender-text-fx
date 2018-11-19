@@ -46,14 +46,13 @@ class TextEffectsManager:
         """Create formatted enum list for UI props"""
         fx_items = deque([])
         fx_names_alphasort = sorted(self.fx_map.keys(), reverse=True)
-        for k in fx_names_alphasort:
-            item_name = "{0}{1}".format(k[0].upper(), k[1:].lower().replace("_", " "))
-            if k.lower() == 'none':
-                item_description = "Add no effect to text"
-                fx_items.appendleft((k, item_name, item_description))
+        for effect_name in fx_names_alphasort:
+            effect_entry = self.fx_map.entry(effect_name)
+            fx_item = (effect_name, effect_entry['title'], effect_entry['description'])
+            if effect_name.lower() == 'none':
+                fx_items.appendleft(fx_item)
                 continue
-            item_description = "Add {0} effect to text".format(k.lower())
-            fx_items.append((k, item_name, item_description))
+            fx_items.append(fx_item)
         fx_items.reverse()
         return list(fx_items)
 
