@@ -181,10 +181,12 @@ class TextEffectsMap(Singleton):
     def create_with_display_data(self, name, attr='', kf_arc=[], axis=[], relative=False, effects=[], title='', description=''):
         """Create an effect with a title and description"""
         if name and effects:
-            self.create_fx(name=name, attr=attr, kf_arc=kf_arc, axis=axis, relative=relative)
-        elif name and kf_arc and not axis:
             self.create_compound_fx(name=name, effects=effects)
-        self.add_display_data(name, title=title, description=description)
+        elif name and attr and kf_arc and axis:
+            self.create_fx(name=name, attr=attr, kf_arc=kf_arc, axis=axis, relative=relative)
+        else:
+            return
+        return self.add_display_data(name, title=title, description=description)
 
     def update_fx(self, name='', effect={}):
         """Update the stored transform data for a named non-compound effect"""

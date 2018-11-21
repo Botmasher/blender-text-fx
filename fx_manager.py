@@ -19,10 +19,17 @@ class TextEffectsManager:
             return
 
         if 'effects' in effect and type(effect['effects']) is list:
-            return self.fx_map.create_compound_fx(name=effect['name'], effects=effect['effects'])
-        else:
-            return self.fx_map.create_fx(
+            return self.fx_map.create_with_display_data(
                 name=effect['name'],
+                title=effect['title'],
+                description=effect['description'],
+                effects=effect['effects']
+            )
+        else:
+            return self.fx_map.create_with_display_data(
+                name=effect['name'],
+                title=effect['title'],
+                description=effect['description'],
                 attr=effect['attr'],
                 kf_arc=effect['kf_arc'],
                 axis=effect['axis'],
