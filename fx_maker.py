@@ -51,8 +51,9 @@ class TextEffectsMaker:
 
             # set offset and base spacing on letter width
             letter_obj.location = [offset_x, *origin[1:]]
+            letter_obj.data.align_x = 'CENTER'
             bpy.context.scene.update()
-            letter_offset = letter_obj.dimensions.x + spacing
+            letter_offset = letter_obj.data.dimensions.x + spacing
             offset_x += letter_offset
 
             # delete blank spaces
@@ -117,7 +118,7 @@ class TextEffectsMaker:
             return
 
         # keyframe along effect arc
-        print("Keyframing {0} effect for letter {1}".format(effect['name'], font_obj))
+        #print("Keyframing {0} effect for letter {1}".format(effect['name'], font_obj))
 
         for kf_mults in effect['kf_arc']:
             # multiply user settings by effect factors to get each kf
@@ -227,10 +228,7 @@ class TextEffectsMaker:
             letter.parent = parent
             letter.matrix_parent_inverse = parent.matrix_world.inverted()
 
-            print("Animating letter {0}. Anim frames: {1} -- Anim offset: {2} -- Current frame: {3}".format(letter, fx['length'], fx['offset'], bpy.context.scene.frame_current))
-
             for effect in fx['effects']:
-                print("Applying effect {0} to letter \"{1}\"".format(effect['name'], letter))
                 # rewind to layer all effects on each letter
                 bpy.context.scene.frame_current = letter_start_frame
                 # apply effect
@@ -269,9 +267,8 @@ class TextEffectsMaker:
         return True
 
     def anim_txt(self, txt, fx_map, time_offset=1, fx_name='', anim_order="forwards", fx_deltas={}, anim_length=5, anim_stagger=0, spacing=0.0, font=''):
-        # TODO use clockwise to set rot +- for transformed x,y,z
+        """Create letter objects from text and apply an animated text effect"""
         if not (txt and type(txt) is str):
-            # TODO exception
             print("ERROR fx_maker.anim_txt: invalid txt arg - expected non-empty string")
             return
 
@@ -280,7 +277,6 @@ class TextEffectsMaker:
             return
 
         if not hasattr(fx_map, 'get_compound_fx'):
-            # TODO exception
             print("ERROR fx_maker.anim_txt: expected fx_name instance to have method get_compound_fx")
             return
 
