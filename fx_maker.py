@@ -37,27 +37,32 @@ class TextEffectsMaker:
         return letter_obj
 
     ## take txt input and turn it into single-letter text objects
-    def string_to_letters(self, txt="", spacing=0.0, font=''):
+    def string_to_letters(self, text="", spacing=0.0, font='', origin=(0,0,0)):
         """Take a string and create an array of letter objects"""
-        origin = (0, 0, 0)
         offset_x = 0
         letter_objs = []
 
         # create font curve object for each letter
-        for l in txt:
+        for i in range(len(text)):
+
+            letter = text[i]
 
             # letter data
-            letter_obj = self.create_letter(txt, letter=l, font=font)
+            letter_obj = self.create_letter(text, letter=letter, font=font)
 
-            # set offset and base spacing on letter width
-            letter_obj.location = [offset_x, *origin[1:]]
+            # set offset and spacing using letter width
             letter_obj.data.align_x = 'CENTER'
             bpy.context.scene.update()
-            letter_offset = letter_obj.data.dimensions.x + spacing
-            offset_x += letter_offset
+            #letter_spacing = 0.0 if i == 0 else spacing
+            letter_offset = 0.5 * letter_obj.dimensions.x
+            letter_obj.location.x = offset_x + letter_offset    # offset letter from left
+            bpy.context.scene.update()
+            offset_x += letter_offset * 2 + spacing             # move right to next letter
+
+            # TODO offset for half of first letter dimensions so letter bodies start on axis
 
             # delete blank spaces
-            if l == " ":
+            if letter == " ":
                 for obj in bpy.context.scene.objects:
                     obj.select = False
                 letter_obj.select = True
@@ -286,7 +291,7 @@ class TextEffectsMaker:
             target_location = bpy.context.scene.cursor_location
 
         # build letter objects
-        letters = self.string_to_letters(txt, spacing=spacing, font=font)
+        letters = self.string_to_letters(text=txt, spacing=spacing, font=font)
 
         # check format of axis and delta maps
         if not self.is_transform_map(fx_deltas):

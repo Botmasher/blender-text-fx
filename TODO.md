@@ -37,6 +37,9 @@
 - [ ] add randomness to transforms
   - [ ] prop for randomizing effect
   - [ ] apply (compare `kf_arc` in fx and logic in `fx_maker`)
+- [ ] test letter spacing and offsetting in `fx_maker.string_to_letters` with a range of fonts
+  - [ ] account for right-left and other letter patterns
+  - [ ] revisit deleting spaces - should they be part of effect?
 
 ## Namespacing
 - [ ] take time to think about names and list rationale here

@@ -28,7 +28,7 @@ text_fx_prop_names = [
 ]
 
 class TextFxProperties(bpy.types.PropertyGroup):
-    text = StringProperty(name="Text", description="Text that was split into animated letters", default="")
+    text = StringProperty(name="Text", description="Text to split into letters and animate", default="")
     font = StringProperty(name="Font", description="Loaded font used for letters in effect", default="Bfont")
     effect = EnumProperty(
         name = "Effect",
